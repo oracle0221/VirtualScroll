@@ -1,23 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import VirtualScroll from './VirtualScroll'
+
+
+const itemHeight = 20,
+      amount = 15, tolerance = 5, minIndex = 0, maxIndex = 20000, startIndex = 0;
+
+const getData = (offset, limit)=>{
+  const data = [];
+  const start = Math.max( minIndex, offset );
+  const end = Math.min(offset + limit - 1, maxIndex);
+
+  if( start < end ){
+
+    for( let i = start; i <= end; i ++ ){
+      data.push({
+        index:i, text: `item ${i}`,
+      });
+    } // end for i
+
+  }
+
+  return data;
+};
+
+const rowTemplate = item=>{
+  return (
+    <div className="item" key={item.index} >
+      {item.text}
+    </div>
+  );
+};
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <VirtualScroll 
+        get={getData}
+        row={rowTemplate}
+      />
     </div>
   );
 }
